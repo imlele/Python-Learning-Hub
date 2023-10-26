@@ -38,8 +38,11 @@ def visits_airport(ticket: str, airport: str) -> bool:
     >>> visits_airport('20230915YYZYEG12F', 'YUL')
     False
     """
+    # Extract the 'From' and 'To' airports from the ticket
     first_airport = ticket[FROM:FROM+3]
     second_airport = ticket[TO:TO+3]
+
+    # Check if the input airport matches either of the airports in the ticket
     return airport == first_airport or airport == second_airport
 
 
@@ -56,6 +59,7 @@ def get_seat_type(ticket:str) -> str:
     >>> get_seat_type('20230915YYZYEG12G')
     ''
     """
+    # Determine the seat type based on the seat number
     seat_number = ticket[SEAT+2]
     if seat_number == "A" or seat_number == "F":
         return WINDOW
@@ -84,10 +88,11 @@ def is_valid_seat(ticket:str) -> bool:
     >>> is_valid_seat('20230915YYZYEG00A')
     False
     """
+    # Extract the row and seat letter from the ticket
     row = int(ticket[SEAT:SEAT+2])
-    # print(row)
-    seat = ticket[SEAT+2] # error 1
-    # print(seat)
+    seat = ticket[SEAT+2]
+
+    # Check if the row is between 1 and 30 (inclusive) and the seat letter is valid
     return 1 <= row <= 30 and seat in "ABCDEF"
 
 
@@ -110,13 +115,16 @@ def is_valid_flyer(ticket:str) -> bool:
     >>> is_valid_flyer('20230915YYZYEG12F12345')
     False
     """
+    # Extract the flyer number from the ticket
+    flyer = ticket[FLYER:]
+
+    # If the flyer number is empty, it is considered valid
     if not (len(ticket) == 17 or len(ticket) == 21):
         return False
-    # print('here')
-    flyer = ticket[FLYER:]
     if flyer == '':
         return True
     else:
+        # Check the validity of the flyer number using a modulo operation
         first = int(flyer[0])
         second = int(flyer[1])
         third = int(flyer[2])
@@ -137,6 +145,7 @@ def is_valid_ticket(ticket:str) -> bool:
     >>> is_valid_ticket('20230915YYZYEG12F1235')
     False
     """
+    # Check if both the flyer number and seat are valid, and if 'From' and 'To' airports are different
     if is_valid_flyer(ticket) and is_valid_seat(ticket):
         first_airport = ticket[FROM:FROM+3]
         second_airport = ticket[TO:TO+3]
@@ -162,9 +171,11 @@ def days_until(ticket:str, date: str) -> int:
     date_month = int(date[4:6])
     date_day = int(date[6:])
 
+    # Calculate the total number of days for both the ticket and the input date
     ticket_total_days = ticket_year * 365 + ticket_month * 30 + ticket_day
     date_total_days = date_year * 365 + date_month * 30 + date_day
 
+    # Calculate the difference in days
     return ticket_total_days - date_total_days
 
 
